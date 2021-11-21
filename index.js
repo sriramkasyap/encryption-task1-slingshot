@@ -1,13 +1,4 @@
-var express = require("express");
-var app = express();
-
-app.post("/auth", (req, res) => {
-  console.log(req.headers);
-  console.log(req.body);
-  res.send({
-    success: true,
-  });
-});
+var app = require("./src/app");
 
 const server = app.listen(4000, onListening);
 
