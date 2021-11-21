@@ -1,10 +1,11 @@
 var express = require("express");
 var path = require("path");
+const { generateKeys } = require("./cryptoutil");
 
 var app = express();
 
 var clientKey = "";
-var secretKey = "";
+var privateKey = "";
 var publicKey = "";
 
 app.get("/", (req, res) => {
@@ -12,20 +13,28 @@ app.get("/", (req, res) => {
 
   res.sendFile(path.join("public", "index.html"), {
     root: "./",
-    headers: {
-      key: clientKey,
-    },
   });
 });
 
-app.post("/auth/init", (req, res) => {
+app.post("/auth/init", async (req, res) => {
   // Generate Pk, Sk
 
-  // Send Sk to client
+  var keyset = await generateKeys();
+  privateKey = keyset.privateKey;
+  publicKey = keyset.publicKey;
+
+  // Send Pk to client
 
   res.send({
     success: true,
-    secretKey,
+    publicKey,
+  });
+});
+
+app.get("/auth/me", (req, res) => {
+  return res.send({
+    success: true,
+    publicKey,
   });
 });
 
