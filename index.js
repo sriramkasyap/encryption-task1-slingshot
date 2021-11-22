@@ -1,6 +1,7 @@
 var app = require("./src/app");
+var port = 5000;
 
-const server = app.listen(4000, onListening);
+const server = app.listen(port, onListening);
 
 function onError(error) {
   if (error.syscall !== "listen") {

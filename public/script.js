@@ -8,14 +8,6 @@ document.getElementById("mainButton").onclick = (e) => {
   })
     .then((r) => r.json())
     .then(async (r) => {
-      // if (await testSecureChannel(r)) {
-      //   console.log("Encryption Check Successful");
-      //   document.getElementById("mainButton").innerText = "Channel Secure";
-      //   document.getElementById("mainButton").setAttribute("disabled", true);
-
-      //   document.getElementById("status").innerHTML =
-      //     "Encryption Check Successful<br/>";
-
       await establishSecureChannel(r);
       setUpForm();
       // }
