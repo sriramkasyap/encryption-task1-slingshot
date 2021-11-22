@@ -8,17 +8,17 @@ document.getElementById("mainButton").onclick = (e) => {
   })
     .then((r) => r.json())
     .then(async (r) => {
-      if (await testSecureChannel(r)) {
-        console.log("Encryption Check Successful");
-        document.getElementById("mainButton").innerText = "Channel Secure";
-        document.getElementById("mainButton").setAttribute("disabled", true);
+      // if (await testSecureChannel(r)) {
+      //   console.log("Encryption Check Successful");
+      //   document.getElementById("mainButton").innerText = "Channel Secure";
+      //   document.getElementById("mainButton").setAttribute("disabled", true);
 
-        document.getElementById("status").innerHTML =
-          "Encryption Check Successful<br/>";
+      //   document.getElementById("status").innerHTML =
+      //     "Encryption Check Successful<br/>";
 
-        await establishSecureChannel();
-        setUpForm();
-      }
+      await establishSecureChannel(r);
+      setUpForm();
+      // }
     });
 };
 
@@ -59,7 +59,8 @@ async function testSecureChannel(r) {
     });
 }
 
-async function establishSecureChannel() {
+async function establishSecureChannel(result) {
+  publicKey = result.publicKey;
   clientKey = generateRandomString(32);
 
   console.log("Encryption Key", clientKey);
@@ -83,6 +84,9 @@ async function establishSecureChannel() {
     .then((r) => r.json())
     .then(async ({ result }) => {
       let message = await clientDecrypt(result);
+
+      document.getElementById("mainButton").innerText = "Channel Secure";
+      document.getElementById("mainButton").setAttribute("disabled", true);
 
       document.getElementById("status").append(message);
       document.getElementById("form").style.display = "block";
@@ -120,6 +124,7 @@ async function transmit(message) {
       let li = document.createElement("li");
       li.innerText = response;
       document.getElementById("messages").append(li);
+      document.getElementById("message").value = "";
     });
 }
 
