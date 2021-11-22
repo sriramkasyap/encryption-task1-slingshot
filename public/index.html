@@ -18,11 +18,13 @@
     <br />
     <button id="mainButton">Secure Connection</button>
     <br />
-    <div id="form">
+    <form id="form">
       <br />
-      <input type="text" placeholder="Your Message" />
+      <input name="message" type="text" placeholder="Your Message" />
       <button type="submit">Send</button>
-    </div>
+    </form>
+
+    <ul id="messages"></ul>
     <br />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"

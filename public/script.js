@@ -1,4 +1,4 @@
-var publicKey;
+var publicKey, messages, clientKey;
 
 document.getElementById("mainButton").onclick = (e) => {
   e.preventDefault();
@@ -16,7 +16,8 @@ document.getElementById("mainButton").onclick = (e) => {
         document.getElementById("status").innerHTML =
           "Encryption Check Successful<br/>";
 
-        establishSecureChannel();
+        await establishSecureChannel();
+        setUpForm();
       }
     });
 };
@@ -59,7 +60,7 @@ async function testSecureChannel(r) {
 }
 
 async function establishSecureChannel() {
-  let clientKey = generateRandomString(32);
+  clientKey = generateRandomString(32);
 
   console.log("Encryption Key", clientKey);
 
@@ -81,11 +82,50 @@ async function establishSecureChannel() {
   })
     .then((r) => r.json())
     .then(async ({ result }) => {
-      var nosalt = CryptoJS.lib.WordArray.random(0);
-      var enc = CryptoJS.AES.decrypt(result, clientKey, { salt: nosalt });
-
-      let message = CryptoJS.enc.Utf8.stringify(enc);
+      let message = await clientDecrypt(result);
 
       document.getElementById("status").append(message);
+      document.getElementById("form").style.display = "block";
     });
+}
+
+async function setUpForm() {
+  document.getElementById("form").onsubmit = (e) => {
+    e.preventDefault();
+    transmit(e.target.elements.message.value);
+  };
+}
+
+async function transmit(message) {
+  console.log("Message", message);
+
+  let messageHashed = CryptoJS.AES.encrypt(message, clientKey).toString();
+
+  console.log("Encrypted Message", messageHashed);
+
+  fetch("/message", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      messageHashed,
+    }),
+  })
+    .then((r) => r.json())
+    .then(async ({ result }) => {
+      console.log("Response", result);
+      let response = await clientDecrypt(result);
+      console.log("Response Decrypted", response);
+      let li = document.createElement("li");
+      li.innerText = response;
+      document.getElementById("messages").append(li);
+    });
+}
+
+async function clientDecrypt(message) {
+  var nosalt = CryptoJS.lib.WordArray.random(0);
+  var enc = CryptoJS.AES.decrypt(message, clientKey, { salt: nosalt });
+
+  return CryptoJS.enc.Utf8.stringify(enc);
 }
