@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "node-cryptojs-aes": "^0.4.0",
     "nodemon": "^2.0.15"
   }
 }

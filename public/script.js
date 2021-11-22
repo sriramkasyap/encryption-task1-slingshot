@@ -9,12 +9,14 @@ document.getElementById("mainButton").onclick = (e) => {
     .then((r) => r.json())
     .then(async (r) => {
       if (await testSecureChannel(r)) {
-        console.log("Secure Channel Established");
+        console.log("Encryption Check Successful");
         document.getElementById("mainButton").innerText = "Channel Secure";
         document.getElementById("mainButton").setAttribute("disabled", true);
 
         document.getElementById("status").innerHTML =
-          "Secure Channel Established";
+          "Encryption Check Successful<br/>";
+
+        establishSecureChannel();
       }
     });
 };
@@ -53,5 +55,37 @@ async function testSecureChannel(r) {
     .then((r) => r.json())
     .then((result) => {
       return result.success && result.result === text;
+    });
+}
+
+async function establishSecureChannel() {
+  let clientKey = generateRandomString(32);
+
+  console.log("Encryption Key", clientKey);
+
+  var crypt = new JSEncrypt();
+
+  crypt.setPublicKey(publicKey); //You can use also setPrivateKey and setPublicKey, they are both alias to setKey
+
+  // Encrypt the data with the public key.
+  var clientKeyEnrypted = crypt.encrypt(clientKey);
+
+  return fetch("/auth/setupClient", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      clientKeyEnrypted,
+    }),
+  })
+    .then((r) => r.json())
+    .then(async ({ result }) => {
+      var nosalt = CryptoJS.lib.WordArray.random(0);
+      var enc = CryptoJS.AES.decrypt(result, clientKey, { salt: nosalt });
+
+      let message = CryptoJS.enc.Utf8.stringify(enc);
+
+      document.getElementById("status").append(message);
     });
 }

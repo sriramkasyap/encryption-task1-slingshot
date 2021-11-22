@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello World</title>
+    <style>
+      #form {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <h1>Solidity Bootcamp - Task 1</h1>
@@ -12,6 +17,27 @@
     <div id="status"></div>
     <br />
     <button id="mainButton">Secure Connection</button>
+    <br />
+    <div id="form">
+      <br />
+      <input type="text" placeholder="Your Message" />
+      <button type="submit">Send</button>
+    </div>
+    <br />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+      integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/aes.min.js"
+      integrity="sha512-4b1zfeOuJCy8B/suCMGNcEkMcQkQ+/jQ6HlJIaYVGvg2ZydPvdp7GY0CuRVbNpSxNVFqwTAmls2ftKSkDI9vtA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
     <script src="/static/jsencrypt.min.js"></script>
     <script src="/static/script.js"></script>
   </body>

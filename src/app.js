@@ -1,6 +1,6 @@
 var express = require("express");
 var path = require("path");
-const { generateKeys, decryptData } = require("./cryptoutil");
+const { generateKeys, decryptData, encryptData } = require("./cryptoutil");
 
 var app = express();
 
@@ -39,6 +39,21 @@ app.post("/auth/decrypt", async (req, res) => {
   let { hashed } = req.body;
 
   let result = decryptData(hashed, privateKey);
+
+  return res.send({
+    success: true,
+    result,
+  });
+});
+
+app.post("/auth/setupClient", async (req, res) => {
+  let { clientKeyEnrypted } = req.body;
+
+  clientKey = decryptData(clientKeyEnrypted, privateKey);
+
+  console.log("Encryption Key", clientKey);
+
+  let result = encryptData("Secure Connection established", clientKey);
 
   return res.send({
     success: true,

@@ -1,6 +1,18 @@
-var { generateKeyPairSync, privateDecrypt, constants } = require("crypto");
+var {
+  generateKeyPairSync,
+  privateDecrypt,
+  constants,
+  createCipher,
+} = require("crypto");
 
-function encryptData(data) {}
+var CryptoJS = require("node-cryptojs-aes").CryptoJS;
+
+function encryptData(data, clientKey) {
+  var cip = CryptoJS.AES.encrypt(data, clientKey).toString();
+  console.log("Encrypted data = " + cip);
+
+  return cip;
+}
 
 function decryptData(data, privateKey) {
   let textBuffer, decryptText;
