@@ -40,8 +40,6 @@ app.post("/auth/decrypt", async (req, res) => {
 
   let result = decryptData(hashed, privateKey);
 
-  console.log(result);
-
   return res.send({
     success: true,
     result,

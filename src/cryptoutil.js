@@ -3,7 +3,6 @@ var { generateKeyPairSync, privateDecrypt, constants } = require("crypto");
 function encryptData(data) {}
 
 function decryptData(data, privateKey) {
-  console.log(data);
   let textBuffer, decryptText;
   try {
     textBuffer = Buffer.from(data, "base64");
@@ -15,8 +14,6 @@ function decryptData(data, privateKey) {
       },
       textBuffer
     ).toString("utf8");
-
-    console.log(decryptText);
   } catch (err) {
     console.error(err);
   }
