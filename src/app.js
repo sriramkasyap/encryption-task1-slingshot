@@ -1,8 +1,12 @@
 var express = require("express");
 var path = require("path");
-const { generateKeys } = require("./cryptoutil");
+const { generateKeys, decryptData } = require("./cryptoutil");
 
 var app = express();
+
+app.use(express.json());
+
+app.use("/static", express.static("public"));
 
 var clientKey = "";
 var privateKey = "";
@@ -28,6 +32,19 @@ app.post("/auth/init", async (req, res) => {
   res.send({
     success: true,
     publicKey,
+  });
+});
+
+app.post("/auth/decrypt", async (req, res) => {
+  let { hashed } = req.body;
+
+  let result = decryptData(hashed, privateKey);
+
+  console.log(result);
+
+  return res.send({
+    success: true,
+    result,
   });
 });
 
